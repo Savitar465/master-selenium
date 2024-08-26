@@ -3,12 +3,12 @@ package com.savitar.seleniumtest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.DemoblazePage;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DemoBlazeTests {
 
@@ -17,58 +17,43 @@ public class DemoBlazeTests {
     @Before
     public void setUp() {
         // Configuración del WebDriver
-        System.setProperty("webdriver.chrome.driver", "F:\\Programacion\\selenium-test\\src\\main\\resources\\chrome-driver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver",
+                "F:\\Programacion\\selenium-test\\src\\main\\resources\\chrome-driver\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
     @Test
-    public void verificarPreciosDeProductos() {
-        // Abrir la página Demo Blaze
-        driver.get("https://demoblaze.com/");
+    public void testProductPresence() {
+        DemoblazePage demoblazePage = new DemoblazePage(driver);
+        demoblazePage.openDemoblazePage();
+        String[] phones = {"Samsung galaxy s6", "Nokia lumia 1520"};
+        String[] laptops = {"Sony vaio i5", "MacBook air"};
+        String[] monitors = {"ASUS Full HD"};
 
-        // Verificar precios de Phones
-        driver.findElement(By.linkText("Phones")).click();
+        demoblazePage.navigateToCategory("phones");
+        for (String phone : phones) {
+            WebElement product = demoblazePage.findByProductName(phone);
+            assertEquals(phone, product.getText());
 
-        WebElement samsungGalaxyS6 = driver.findElement(By.linkText("Samsung galaxy s6"));
-        samsungGalaxyS6.click();
-        WebElement samsungPrice = driver.findElement(By.tagName("h3"));
-        assertEquals("$360 *includes tax", samsungPrice.getText());
-        driver.navigate().back();
+        }
 
-        WebElement nokiaLumia1520 = driver.findElement(By.linkText("Nokia lumia 1520"));
-        nokiaLumia1520.click();
-        WebElement nokiaPrice = driver.findElement(By.tagName("h3"));
-        assertEquals("$820 *includes tax", nokiaPrice.getText());
-        driver.navigate().back();
+        demoblazePage.navigateToCategory("laptops");
+        for (String laptop : laptops) {
+            WebElement product = demoblazePage.findByProductName(laptop);
+            assertEquals(product.getText(), laptop);
+        }
 
-        // Verificar precios de Laptops
-        driver.findElement(By.linkText("Laptops")).click();
+        demoblazePage.navigateToCategory("monitors");
+        for (String monitor : monitors) {
+            WebElement product = demoblazePage.findByProductName(monitor);
+            assertEquals(product.getText(), monitor);
+        }
 
-        WebElement sonyVaioI5 = driver.findElement(By.linkText("Sony vaio i5"));
-        sonyVaioI5.click();
-        WebElement sonyPrice = driver.findElement(By.tagName("h3"));
-        assertEquals("$790 *includes tax", sonyPrice.getText());
-        driver.navigate().back();
-
-        WebElement macBookAir = driver.findElement(By.linkText("MacBook air"));
-        macBookAir.click();
-        WebElement macPrice = driver.findElement(By.tagName("h3"));
-        assertEquals("$700 *includes tax", macPrice.getText());
-        driver.navigate().back();
-
-        // Verificar precio de Monitors
-        driver.findElement(By.linkText("Monitors")).click();
-
-        WebElement asusFullHD = driver.findElement(By.linkText("ASUS Full HD"));
-        asusFullHD.click();
-        WebElement asusPrice = driver.findElement(By.tagName("h3"));
-        assertEquals("$230 *includes tax", asusPrice.getText());
     }
 
     @After
     public void tearDown() {
-        // Cerrar el navegador
         driver.quit();
     }
 
