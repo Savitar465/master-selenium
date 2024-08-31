@@ -13,10 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DemoBlazeTests {
 
     private WebDriver driver;
+    private final String[] phones = {"Samsung galaxy s6", "Nokia lumia 1520"};
+    private final String[] laptops = {"Sony vaio i5", "MacBook air"};
+    private final String[] monitors = {"ASUS Full HD"};
 
     @Before
     public void setUp() {
-        // Configuración del WebDriver
+        // Utilizar la ruta correcta del webdriver de chrome
         System.setProperty("webdriver.chrome.driver",
                 "F:\\Programacion\\selenium-test\\src\\main\\resources\\chrome-driver\\chromedriver.exe");
         driver = new ChromeDriver();
@@ -27,15 +30,11 @@ public class DemoBlazeTests {
     public void testProductPresence() {
         DemoblazePage demoblazePage = new DemoblazePage(driver);
         demoblazePage.openDemoblazePage();
-        String[] phones = {"Samsung galaxy s6", "Nokia lumia 1520"};
-        String[] laptops = {"Sony vaio i5", "MacBook air"};
-        String[] monitors = {"ASUS Full HD"};
 
         demoblazePage.navigateToCategory("phones");
         for (String phone : phones) {
             WebElement product = demoblazePage.findByProductName(phone);
             assertEquals(phone, product.getText());
-
         }
 
         demoblazePage.navigateToCategory("laptops");
@@ -49,7 +48,30 @@ public class DemoBlazeTests {
             WebElement product = demoblazePage.findByProductName(monitor);
             assertEquals(product.getText(), monitor);
         }
+    }
 
+    @Test
+    public void testProductPrice() {
+        DemoblazePage demoblazePage = new DemoblazePage(driver);
+        demoblazePage.openDemoblazePage();
+
+        demoblazePage.navigateToCategory("phones");
+        for (String phone : phones) {
+            String price = demoblazePage.getProductPrice(phone);
+            System.out.println(phone + " price: " + price);
+        }
+
+        demoblazePage.navigateToCategory("laptops");
+        for (String laptop : laptops) {
+            String price = demoblazePage.getProductPrice(laptop);
+            System.out.println(laptop + " price: " + price);
+        }
+
+        demoblazePage.navigateToCategory("monitors");
+        for (String monitor : monitors) {
+            String price = demoblazePage.getProductPrice(monitor);
+            System.out.println(monitor + " price: " + price);
+        }
     }
 
     @After

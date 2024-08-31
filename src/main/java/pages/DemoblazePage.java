@@ -107,4 +107,31 @@ public class DemoblazePage {
     }
 
 
+    public WebElement getProductPrice(String productName) {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                return productTitles.stream()
+                        .map(product -> {
+                            try {
+                                WebElement w = product.findElement(By.xpath(".//h4/a[contains(text(),'" + productName + "')]"));
+                                if (w != null) {
+                                    log.info("Product found: {}", w.getText());
+                                }
+                                return w;
+                            } catch (NoSuchElementException e) {
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Product not found: " + productName));
+            } catch (StaleElementReferenceException e) {
+                attempts++;
+                log.warn("Attempt {} - StaleElementReferenceException caught, retrying...", attempts);
+            }
+        }
+        throw new RuntimeException("Product not found after multiple attempts: " + productName);
+    }
 }
