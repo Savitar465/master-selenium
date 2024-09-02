@@ -55,10 +55,10 @@ public class MarketPage {
         };
         if (categoryElement != null) {
             categoryElement.click();
-            waitForContent();
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(7));
         }
     }
-
 
     public Producto buscarProducto(String productName) {
         for (int attempts = 0; attempts < 3; attempts++) {

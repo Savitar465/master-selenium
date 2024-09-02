@@ -33,7 +33,8 @@ public class MarketTests {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver");
+        System.setProperty("webdriver.chrome.driver",
+                "F:\\Programacion\\selenium-test\\src\\main\\resources\\chrome-driver\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
